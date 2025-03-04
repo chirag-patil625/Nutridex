@@ -10,6 +10,9 @@ import Signup from './pages/Signup';
 import Chat from './pages/Chat';
 import Result from './pages/Result';
 import reportWebVitals from './reportWebVitals';
+import Scan from './pages/Scan';
+import ManualEntry from './pages/ManualEntry';
+import FoodLabelScanner from './pages/Scan';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +30,14 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <Signup />,
+      },
+      {
+        path: '/scan',
+        element: <FoodLabelScanner />,
+      },
+      {
+        path: '/manual-entry',
+        element: <ManualEntry />,
       },
       {
         path: '/chat',

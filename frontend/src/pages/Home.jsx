@@ -1,56 +1,229 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import { 
+  Microscope, 
+  ShieldCheck, 
+  TrendingUp,
+  Camera,
+  Search,
+  CheckCircle,
+  TrendingUp as Trend
+} from 'lucide-react';
 
-export default function Home() {
+const Home = () => {
+  const [activeFeature, setActiveFeature] = useState(0);
+  const [visibleSections, setVisibleSections] = useState({
+    workflow: false,
+    features: false
+  });
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const workflowSection = document.getElementById('workflow-section');
+      const featuresSection = document.getElementById('features-section');
+
+      if (workflowSection) {
+        const rect = workflowSection.getBoundingClientRect();
+        const isVisible = (rect.top < window.innerHeight * 0.75 && rect.bottom >= 0);
+        setVisibleSections(prev => ({ ...prev, workflow: isVisible }));
+      }
+
+      if (featuresSection) {
+        const rect = featuresSection.getBoundingClientRect();
+        const isVisible = (rect.top < window.innerHeight * 0.75 && rect.bottom >= 0);
+        setVisibleSections(prev => ({ ...prev, features: isVisible }));
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const features = [
+    { 
+      icon: <Microscope className="w-16 h-16 text-[#FF4081]" />, 
+      title: "Precision Nutrition Scan", 
+      description: "Advanced OCR technology extracts precise nutritional data with unprecedented accuracy.",
+      color: "from-pink-500 to-pink-600"
+    },
+    { 
+      icon: <ShieldCheck className="w-16 h-16 text-[#F50057]" />, 
+      title: "Intelligent Health Rating", 
+      description: "Comprehensive algorithm provides nuanced health insights beyond simple metrics.",
+      color: "from-rose-500 to-rose-600"
+    },
+    { 
+      icon: <TrendingUp className="w-16 h-16 text-[#FF4081]" />, 
+      title: "Nutritional Insights", 
+      description: "Deep analytical breakdown of ingredients, revealing hidden nutritional complexities.",
+      color: "from-fuchsia-500 to-fuchsia-600"
+    }
+  ];
+
+  const workflowSteps = [
+    {
+      icon: <Camera className="w-12 h-12 text-pink-600" />,
+      title: "Upload Food Label",
+      description: "Capture or upload a clear image of your food product's nutrition label.",
+      color: "bg-pink-50",
+      stairClass: "md:ml-0 md:mr-auto"
+    },
+    {
+      icon: <Search className="w-12 h-12 text-rose-600" />,
+      title: "Advanced OCR Extraction",
+      description: "Our AI-powered OCR technology precisely extracts nutritional information.",
+      color: "bg-rose-50",
+      stairClass: "md:ml-auto md:mr-0"
+    },
+    {
+      icon: <CheckCircle className="w-12 h-12 text-fuchsia-600" />,
+      title: "Intelligent Analysis",
+      description: "Complex algorithms evaluate nutritional content and health impact.",
+      color: "bg-fuchsia-50",
+      stairClass: "md:ml-0 md:mr-auto"
+    },
+    {
+      icon: <Trend className="w-12 h-12 text-purple-600" />,
+      title: "Personalized Insights",
+      description: "Receive comprehensive nutrition ratings and personalized recommendations.",
+      color: "bg-purple-50",
+      stairClass: "md:ml-auto md:mr-0"
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-secondary-light dark:bg-secondary-dark transition-colors duration-200">
-      <div className="container mx-auto px-4 py-24">
-        <div className="text-center max-w-4xl mx-auto mb-20">
-          <h1 className="text-7xl font-black text-primary-dark dark:text-primary-light mb-8">
-            FODIEE
-          </h1>
-          <p className="text-2xl text-gray-700 dark:text-gray-300 mb-12 leading-relaxed font-light max-w-2xl mx-auto">
-            Your Smart Food Analysis Companion.<br/>
-            Scan & Learn What's Really in Your Food
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF5F8] via-white to-[#FFF0F5] overflow-x-hidden">
+      <div className="container mx-auto px-4 py-16 md:py-24">
+        {/* Hero Section */}
+        <div className="text-center max-w-4xl mx-auto mb-16">
+          <div className="inline-block">
+            <h1 className="text-5xl md:text-7xl font-extrabold 
+              bg-gradient-to-r from-[#FF4081] to-[#F50057] 
+              text-transparent bg-clip-text 
+              mb-6 tracking-tight">
+              Nutridex
+            </h1>
+          </div>
+          <p className="text-xl md:text-2xl text-gray-700 mb-10 
+            leading-relaxed max-w-2xl mx-auto font-medium">
+            Revolutionize Your Nutrition Understanding with Intelligent Food Analysis
           </p>
-          <NavLink
-            to="/chat"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark dark:bg-primary-light
-            dark:hover:bg-primary text-white dark:text-secondary-dark font-medium py-4 px-8 rounded-md text-lg 
-            shadow-lg transition-all duration-300 hover:-translate-y-0.5"
-          >
-            Start Scanning Now
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-            </svg>
-          </NavLink>
+          
+          {/* Call to Action Buttons */}
+          <div className="flex justify-center space-x-4">
+            <NavLink 
+              to="/scan"
+              className="flex items-center gap-2 
+              bg-gradient-to-r from-[#FF4081] to-[#F50057]
+              text-white font-semibold py-3.5 px-7 
+              rounded-full transition-all duration-300 
+              hover:scale-105 hover:shadow-xl 
+              shadow-[#FF4081]/30 transform"
+            >
+              Scan Food Label
+            </NavLink>
+            <NavLink 
+              to="/manual-entry"
+              className="flex items-center gap-2 
+              bg-white border border-pink-200
+              text-[#FF4081] font-semibold py-3.5 px-7 
+              rounded-full transition-all duration-300 
+              hover:bg-pink-50 hover:scale-105 
+              shadow-md"
+            >
+              Manual Entry
+            </NavLink>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {['Quick Analysis', 'Ingredient Check', 'Nutrition Facts'].map((title, index) => (
-            <div key={index} 
-              className="bg-white dark:bg-gray-800/50 backdrop-blur p-8 rounded-lg 
-              border border-primary/10 dark:border-primary-light/10 hover:border-primary/30 
-              dark:hover:border-primary-light/30 transform transition-all duration-300 
-              hover:-translate-y-1 shadow-lg"
-            >
-              <div className="mb-4 text-blue-400">
-                {index === 0 && <span className="text-3xl">🔍</span>}
-                {index === 1 && <span className="text-3xl">🧪</span>}
-                {index === 2 && <span className="text-3xl">📊</span>}
+        {/* Stair-like Workflow Section */}
+        <div 
+          id="workflow-section" 
+          className="max-w-6xl mx-auto mb-16 relative"
+        >
+          <h2 className="text-3xl font-bold text-center mb-16 
+            bg-gradient-to-r from-[#FF4081] to-[#F50057] 
+            text-transparent bg-clip-text">
+            How Nutridex Works
+          </h2>
+          
+          {/* Ladder Line */}
+          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-32 bottom-32 w-1 bg-gradient-to-b from-pink-200 via-rose-200 to-purple-200"></div>
+          
+          <div className="relative w-full space-y-16 md:space-y-24">
+            {workflowSteps.map((step, index) => (
+              <div 
+                key={index} 
+                className={`flex items-center w-full md:w-2/3 
+                  ${step.stairClass} 
+                  transition-all duration-700 ease-in-out transform 
+                  ${visibleSections.workflow 
+                    ? 'opacity-100 translate-y-0 scale-100' 
+                    : 'opacity-0 translate-y-10 scale-95'}`}
+              >
+                {/* Step Content */}
+                <div className="flex items-center w-full">
+                  {/* Icon Container */}
+                  <div className={`w-20 h-20 rounded-full flex items-center justify-center 
+                    ${step.color} border-4 border-white shadow-lg mr-6 flex-shrink-0 
+                    relative z-10`}>
+                    {step.icon}
+                  </div>
+                  
+                  {/* Text Container */}
+                  <div className="bg-white rounded-2xl shadow-lg p-6 flex-grow">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600">
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                {title}
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                {index === 0 && "Instant health insights through advanced OCR technology"}
-                {index === 1 && "Deep analysis of ingredients and their health impact"}
-                {index === 2 && "Comprehensive nutritional information at your fingertips"}
-              </p>
+            ))}
+          </div>
+        </div>
+
+        {/* Feature Section */}
+        <div 
+          id="features-section"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        >
+          {features.map((feature, index) => (
+            <div 
+              key={index}
+              onMouseEnter={() => setActiveFeature(index)}
+              className={`relative group cursor-pointer 
+                transform transition-all duration-500 
+                ${visibleSections.features 
+                  ? 'opacity-100 translate-y-0 scale-100' 
+                  : 'opacity-0 translate-y-10 scale-95'}
+                ${activeFeature === index ? 'scale-105' : 'scale-95 opacity-60'}
+                hover:scale-105 hover:opacity-100`}
+            >
+              <div className={`absolute inset-0 bg-gradient-to-r ${feature.color} 
+                rounded-full opacity-0 group-hover:opacity-10 
+                transition-opacity duration-500 blur-3xl`}></div>
+              
+              <div className="relative z-10 flex flex-col items-center 
+                text-center p-6 rounded-3xl transition-all duration-500">
+                <div className="mb-5 bg-white rounded-full p-4 shadow-lg">
+                  {feature.icon}
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 max-w-xs">
+                  {feature.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default Home;
